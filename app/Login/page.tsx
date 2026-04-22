@@ -30,7 +30,7 @@ export default function LoginDemoPage() {
       <div className="mx-auto flex max-w-5xl flex-col gap-10">
         <header className="flex flex-col gap-2 text-center">
           <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-            دموی persian-auth
+            Test for persian auth
           </h1>
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
             تمامی روش‌های ورود — شماره تلفن، نام کاربری، ایمیل و گیت‌هاب.
