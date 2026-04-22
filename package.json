@@ -1,17 +1,53 @@
 {
   "name": "persian-auth",
   "version": "0.1.0",
+  "description": "Persian (Farsi) authentication React components: phone + OTP, username/password, email, and GitHub OAuth.",
+  "keywords": [
+    "react",
+    "auth",
+    "login",
+    "persian",
+    "farsi",
+    "rtl",
+    "otp",
+    "github-oauth"
+  ],
+  "license": "MIT",
   "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./src/styles.css"
+  },
+  "files": [
+    "dist",
+    "src/styles.css",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "build:lib": "tsup"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "dependencies": {
-    "next": "16.1.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -20,7 +56,11 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "next": "^16.2.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "tailwindcss": "^4",
+    "tsup": "^8.5.0",
     "typescript": "^5"
   }
 }
