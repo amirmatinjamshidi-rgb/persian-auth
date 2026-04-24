@@ -13,6 +13,8 @@ export type {
   AuthErrorHandler,
   PersianLoginFormProps,
   PersianLoginLibraryProps,
+  PersianLoginClassNames,
+  PersianInputSlot,
   GithubLoginButtonProps,
   PersianFormValues,
   FieldName,

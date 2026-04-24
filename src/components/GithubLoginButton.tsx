@@ -100,7 +100,7 @@ export const GithubLoginButton: React.FC<GithubLoginButtonProps> = ({
       type="button"
       onClick={handleClick}
       disabled={disabled}
-      className={`btn github-btn ${className ?? ""}`.trim()}
+      className={`inline-flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-zinc-100 transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 ${className ?? ""}`.trim()}
       aria-label={label}
     >
       <svg

@@ -15,12 +15,45 @@ export interface AuthSuccessData {
 export type AuthSuccessHandler = (data: AuthSuccessData) => void;
 export type AuthErrorHandler = (error: string) => void;
 
+export type PersianInputSlot =
+  | "phone"
+  | "username"
+  | "email"
+  | "password"
+  | "confirmPassword"
+  | "otp";
+
+export interface PersianLoginClassNames {
+  container?: string;
+  formRoot?: string;
+  form?: string;
+  formGroup?: string;
+  label?: string;
+  input?: string;
+  inputError?: string;
+  inputByField?: Partial<Record<PersianInputSlot, string>>;
+  inputErrorByField?: Partial<Record<PersianInputSlot, string>>;
+  errorText?: string;
+  submitButton?: string;
+  verificationStep?: string;
+  instructions?: string;
+  otpContainer?: string;
+  otpInput?: string;
+  otpInputError?: string;
+  resendButton?: string;
+  actions?: string;
+  primaryActionButton?: string;
+  secondaryActionButton?: string;
+  generalError?: string;
+}
+
 export interface PersianLoginFormProps {
   type: LoginType;
   mode?: FormMode;
   onAuthSuccess?: AuthSuccessHandler;
   onError?: AuthErrorHandler;
   className?: string;
+  classNames?: PersianLoginClassNames;
 }
 
 export interface PersianLoginLibraryProps {
@@ -29,6 +62,7 @@ export interface PersianLoginLibraryProps {
   onAuthSuccess: AuthSuccessHandler;
   onAuthError?: AuthErrorHandler;
   className?: string;
+  classNames?: PersianLoginClassNames;
 }
 
 export interface GithubLoginButtonProps {
