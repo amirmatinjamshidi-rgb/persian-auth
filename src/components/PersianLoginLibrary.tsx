@@ -17,14 +17,19 @@ export const PersianLoginLibrary: React.FC<PersianLoginLibraryProps> = ({
   onAuthSuccess,
   onAuthError,
   className,
+  classNames,
 }) => {
   return (
-    <div className={`persian-login-container ${className ?? ""}`.trim()}>
+    <div
+      className={`mx-auto w-full max-w-md rounded-xl border border-zinc-800 bg-zinc-950/70 p-5 text-zinc-100 shadow-lg ${className ?? ""} ${classNames?.container ?? ""}`.trim()}
+      data-pa-container="true"
+    >
       <PersianLoginForm
         type={type}
         mode={mode}
         onAuthSuccess={onAuthSuccess}
         onError={onAuthError}
+        classNames={classNames}
       />
     </div>
   );
