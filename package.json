@@ -1,6 +1,6 @@
 {
   "name": "persian-auth",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Persian (Farsi) authentication React components: phone + OTP, username/password, email, and GitHub OAuth.",
   "keywords": [
     "react",
