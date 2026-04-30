@@ -1,6 +1,6 @@
 <div align="center">
 
-# persian-auth
+$${\color{red}Persian \space\color{lightgreen}{auth}}$$
 
 **Persian (Farsi) authentication React components — without React Query.**
 
