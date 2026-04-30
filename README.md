@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🔐 persian-auth
+$$\Huge\color{red}\textsf{Persian}\space\color{white}\textsf{authentication}\space\color{lightgreen}\textsf{library}$$
 
 ### Persian (Farsi) authentication React components — without React Query
 
@@ -14,27 +14,27 @@ RTL-ready · Fully typed · Framework-agnostic
   <a href="https://www.npmjs.com/package/persian-auth"><img src="https://img.shields.io/npm/types/persian-auth?style=flat-square&color=3178c6" alt="types"></a>
   <img src="https://img.shields.io/badge/React-18%20%7C%2019-61dafb?style=flat-square&logo=react" alt="react">
   <img src="https://img.shields.io/badge/RTL-ready-f97316?style=flat-square" alt="rtl">
-  <a href="#-license"><img src="https://img.shields.io/npm/l/persian-auth?style=flat-square&color=64748b" alt="license"></a>
+  <a href="#license"><img src="https://img.shields.io/npm/l/persian-auth?style=flat-square&color=64748b" alt="license"></a>
 </p>
 
 </div>
 
 ---
 
-## ✨ Features
+## Features
 
-|     |     |
-| --- | --- |
-| 📱 **Phone + OTP** | Built-in countdown, resend, validation |
-| 🔑 **Email / Username** | Sign in & sign up modes out of the box |
-| 🐙 **GitHub OAuth** | CSRF-safe `state`, redirect handler included |
-| 🌐 **RTL-first** | Persian copy and layout shipped by default |
-| 📦 **ESM + CJS** | Full TypeScript types, tree-shakable |
-| ⚡ **Zero deps** | No React Query, no global cache, no setup |
+|                         |                                              |
+| ----------------------- | -------------------------------------------- |
+| 📱 **Phone + OTP**      | Built-in countdown, resend, validation       |
+| 🔑 **Email / Username** | Sign in & sign up modes out of the box       |
+| 🐙 **GitHub OAuth**     | CSRF-safe `state`, redirect handler included |
+| 🌐 **RTL-first**        | Persian copy and layout shipped by default   |
+| 📦 **ESM + CJS**        | Full TypeScript types, tree-shakable         |
+| ⚡ **Zero deps**        | No React Query, no global cache, no setup    |
 
 ---
 
-## 🚀 30-second example
+## 30-second example
 
 ```tsx
 import { PersianLoginLibrary } from "persian-auth";
@@ -53,7 +53,7 @@ export default function Login() {
 
 ---
 
-## 🤔 Why no React Query?
+## Why no React Query?
 
 `persian-auth` is designed for authentication flows, not general server-state caching.
 
@@ -71,7 +71,7 @@ This library owns those **auth-specific loading and error states** for you. You 
 
 ---
 
-## 💡 Auth Actions, in one sentence
+## Auth Actions, in one sentence
 
 > An **auth action** is a focused async operation used by an authentication UI — request OTP, verify OTP, submit credentials, start OAuth, log out.
 
@@ -79,20 +79,19 @@ Unlike a data-fetching library, `persian-auth` intentionally does **not** manage
 
 ---
 
-## 📖 Table of contents
+## Table of contents
 
-- [Install](#-install)
-- [Quick start](#-quick-start)
-- [Wiring up a real backend](#-wiring-up-a-real-backend)
-- [GitHub OAuth](#-github-oauth)
-- [Public API](#-public-api)
-- [Repository layout](#%EF%B8%8F-repository-layout)
-- [Scripts](#%EF%B8%8F-scripts)
-- [License](#-license)
+- [Install](#install)
+- [Quick start](#quick-start)
+- [Wiring up a real backend](#wiring-up-a-real-backend)
+- [GitHub OAuth](#github-oauth)
+- [Public API](#public-api)
+- [Repository layout](#repository-layout)
+- [License](#license)
 
 ---
 
-## 📦 Install
+## Install
 
 ```bash
 npm install persian-auth zod
@@ -106,7 +105,7 @@ yarn add persian-auth zod
 
 ---
 
-## 🚀 Quick start
+## Quick start
 
 ```tsx
 import {
@@ -164,12 +163,12 @@ Wrap your app in an RTL container so layout renders correctly:
 
 ---
 
-## 🔌 Wiring up a real backend
+## Wiring up a real backend
 
 By default the form simulates API calls with an 800 ms delay. Pass your own async functions to talk to a real backend — no `useMutation` needed, the library tracks loading and errors for you.
 
 <details>
-<summary><b>👉 Show full backend wiring example</b></summary>
+<summary><b>Show full backend wiring example</b></summary>
 
 ```tsx
 <PersianLoginForm
@@ -205,7 +204,7 @@ Anything thrown becomes a typed error in `onError`. Anything resolved triggers `
 
 ---
 
-## 🐙 GitHub OAuth
+## GitHub OAuth
 
 `GithubLoginButton` performs the redirect half of the standard authorization-code flow:
 
@@ -215,7 +214,7 @@ Anything thrown becomes a typed error in `onError`. Anything resolved triggers `
 4. **Your server must exchange the code for a token** — this requires the client secret and cannot be done in the browser.
 
 <details>
-<summary><b>👉 Show typical server-side exchange</b></summary>
+<summary><b>Show typical server-side exchange</b></summary>
 
 ```ts
 // Next.js Route Handler example: app/api/github/callback/route.ts
@@ -235,7 +234,7 @@ const res = await fetch("https://github.com/login/oauth/access_token", {
 
 ---
 
-## 📚 Public API
+## Public API
 
 | Export                                        | Kind      | Purpose                                                                            |
 | --------------------------------------------- | --------- | ---------------------------------------------------------------------------------- |
@@ -247,7 +246,7 @@ const res = await fetch("https://github.com/login/oauth/access_token", {
 
 ---
 
-## 🗂️ Repository layout
+## Repository layout
 
 ```
 src/                 # library source (shipped)
@@ -262,18 +261,7 @@ dist/                # build output (git-ignored)
 
 ---
 
-## 🛠️ Scripts
-
-```bash
-npm run dev         # start the Next.js demo at http://localhost:3000
-npm run build       # production build of the demo app
-npm run typecheck   # tsc --noEmit across the whole repo
-npm run build:lib   # bundle src/ into dist/ (ESM + CJS + .d.ts) via tsup
-```
-
----
-
-## 📄 License
+## License
 
 MIT
 
