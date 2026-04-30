@@ -86,3 +86,43 @@ export interface PersianFormValues {
 }
 
 export type FieldName = keyof PersianFormValues;
+
+
+export type AuthErrorCode =
+  | "network"
+  | "timeout"
+  | "aborted"
+  | "validation"
+  | "unauthorized"
+  | "forbidden"
+  | "not_found"
+  | "rate_limited"
+  | "server"
+  | "unknown";
+
+
+export interface AuthError {
+  code: AuthErrorCode;
+  message: string;
+  status?: number;
+  fields?: Partial<Record<FieldName | "otp" | "general", string>>;
+  cause?: unknown;
+}
+
+/** Lifecycle state of any auth action (form submit, OTP request, session fetch, ...). */
+export type AuthActionStatus = "idle" | "pending" | "success" | "error";
+
+/**
+ * Discriminated result of a settled auth action.
+ *
+ * Consumers can branch on `result.ok` instead of wrapping calls in
+ * try/catch or pulling in a server-state library:
+ *
+ * ```ts
+ * const result = await action.run();
+ * if (result.ok) { ... } else { showError(result.error); }
+ * ```
+ */
+export type AuthActionResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; error: AuthError };
