@@ -71,11 +71,23 @@ This library owns those **auth-specific loading and error states** for you. You 
 
 ---
 
-## Auth Actions, in one sentence
+## Concepts
 
-> An **auth action** is a focused async operation used by an authentication UI — request OTP, verify OTP, submit credentials, start OAuth, log out.
+`persian-auth` is built around two small ideas:
 
-Unlike a data-fetching library, `persian-auth` intentionally does **not** manage query keys, cache invalidation, stale times, pagination, or background refetching. It only handles the state needed for authentication flows.
+- **Auth actions** — focused async operations used by an authentication UI: request OTP, verify OTP, submit credentials, start OAuth, log out. The library owns their loading and error state for you, so you don't need a mutation hook from a server-state library.
+- **Session helpers** _(planned)_ — a tiny optional layer for "who is the current user?" state, plus `refreshSession` and `logout`. This is the single most common reason teams reach for React Query on auth pages, and it's coming as a first-class part of `persian-auth`.
+
+### What this library deliberately is not
+
+`persian-auth` is **not** a server-state cache or a general data-fetching library. It does not manage:
+
+- query keys or query invalidation
+- cache freshness, stale times, or background refetching
+- pagination or infinite scrolling
+- non-auth network requests
+
+If you need any of that, keep using your existing data layer — `persian-auth` is designed to sit happily alongside it.
 
 ---
 
