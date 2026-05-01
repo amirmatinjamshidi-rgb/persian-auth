@@ -1,29 +1,55 @@
 <div align="center">
 
-# persian-auth
+$$\Huge\color{red}\textsf{Persian}\space\color{white}\textsf{authentication}\space\color{lightgreen}\textsf{library}$$
 
-**Persian (Farsi) authentication React components — without React Query.**
+### Persian (Farsi) authentication React components — without React Query
 
-Phone + OTP, username/password, email, and GitHub OAuth.
-RTL-ready, fully typed, framework-agnostic.
+Phone + OTP · Username / Password · Email · GitHub OAuth  
+RTL-ready · Fully typed · Framework-agnostic
 
-[![npm version](https://img.shields.io/npm/v/persian-auth.svg?color=22d3ee)](https://www.npmjs.com/package/persian-auth)
-[![types](https://img.shields.io/npm/types/persian-auth.svg?color=06b6d4)](https://www.npmjs.com/package/persian-auth)
-[![license](https://img.shields.io/npm/l/persian-auth.svg?color=64748b)](#license)
-[![bundle](https://img.shields.io/bundlephobia/minzip/persian-auth?label=min%2Bgzip&color=10b981)](https://bundlephobia.com/package/persian-auth)
+<p>
+  <a href="https://www.npmjs.com/package/persian-auth"><img src="https://img.shields.io/npm/v/persian-auth?style=flat-square&color=22d3ee&label=npm" alt="npm"></a>
+  <a href="https://www.npmjs.com/package/persian-auth"><img src="https://img.shields.io/npm/dm/persian-auth?style=flat-square&color=06b6d4" alt="downloads"></a>
+  <a href="https://bundlephobia.com/package/persian-auth"><img src="https://img.shields.io/bundlephobia/minzip/persian-auth?style=flat-square&label=min%2Bgzip&color=10b981" alt="bundle size"></a>
+  <a href="https://www.npmjs.com/package/persian-auth"><img src="https://img.shields.io/npm/types/persian-auth?style=flat-square&color=3178c6" alt="types"></a>
+  <img src="https://img.shields.io/badge/React-18%20%7C%2019-61dafb?style=flat-square&logo=react" alt="react">
+  <img src="https://img.shields.io/badge/RTL-ready-f97316?style=flat-square" alt="rtl">
+  <a href="#license"><img src="https://img.shields.io/npm/l/persian-auth?style=flat-square&color=64748b" alt="license"></a>
+</p>
 
 </div>
 
 ---
 
-## Highlights
+## Features
 
-- Drop-in Persian login UI for **phone + OTP**, **username/password**, **email/password**, and **GitHub OAuth**.
-- Ships **ESM + CJS** with full type definitions.
-- Works in any React 18/19 app — Next.js, Vite, Remix, CRA, etc.
-- **No React Query, no global cache, no extra setup** — just render a component.
-- All Persian copy is built in. Validation powered by [`zod`](https://zod.dev).
-- Pure callbacks: success and error are surfaced as typed handlers.
+|                         |                                              |
+| ----------------------- | -------------------------------------------- |
+| 📱 **Phone + OTP**      | Built-in countdown, resend, validation       |
+| 🔑 **Email / Username** | Sign in & sign up modes out of the box       |
+| 🐙 **GitHub OAuth**     | CSRF-safe `state`, redirect handler included |
+| 🌐 **RTL-first**        | Persian copy and layout shipped by default   |
+| 📦 **ESM + CJS**        | Full TypeScript types, tree-shakable         |
+| ⚡ **Zero deps**        | No React Query, no global cache, no setup    |
+
+---
+
+## 30-second example
+
+```tsx
+import { PersianLoginLibrary } from "persian-auth";
+import "persian-auth/styles.css";
+
+export default function Login() {
+  return (
+    <PersianLoginLibrary
+      type="phone"
+      onAuthSuccess={(data) => console.log("logged in:", data)}
+      onAuthError={(err) => console.error(err)}
+    />
+  );
+}
+```
 
 ---
 
@@ -45,11 +71,23 @@ This library owns those **auth-specific loading and error states** for you. You 
 
 ---
 
-## Auth Actions, in one sentence
+## Concepts
 
-> An **auth action** is a focused async operation used by an authentication UI — request OTP, verify OTP, submit credentials, start OAuth, log out.
+`persian-auth` is built around two small ideas:
 
-Unlike a data-fetching library, `persian-auth` intentionally does **not** manage query keys, cache invalidation, stale times, pagination, or background refetching. It only handles the state needed for authentication flows.
+- **Auth actions** — focused async operations used by an authentication UI: request OTP, verify OTP, submit credentials, start OAuth, log out. The library owns their loading and error state for you, so you don't need a mutation hook from a server-state library.
+- **Session helpers** _(planned)_ — a tiny optional layer for "who is the current user?" state, plus `refreshSession` and `logout`. This is the single most common reason teams reach for React Query on auth pages, and it's coming as a first-class part of `persian-auth`.
+
+### What this library deliberately is not
+
+`persian-auth` is **not** a server-state cache or a general data-fetching library. It does not manage:
+
+- query keys or query invalidation
+- cache freshness, stale times, or background refetching
+- pagination or infinite scrolling
+- non-auth network requests
+
+If you need any of that, keep using your existing data layer — `persian-auth` is designed to sit happily alongside it.
 
 ---
 
@@ -61,8 +99,6 @@ Unlike a data-fetching library, `persian-auth` intentionally does **not** manage
 - [GitHub OAuth](#github-oauth)
 - [Public API](#public-api)
 - [Repository layout](#repository-layout)
-- [Scripts](#scripts)
-- [Publishing](#publishing)
 - [License](#license)
 
 ---
@@ -92,39 +128,42 @@ import {
 import "persian-auth/styles.css"; // optional default styling
 
 export function LoginPage() {
-  const onAuthSuccess = (data: AuthSuccessData) => {
+  const handleSuccess = (data: AuthSuccessData) => {
     console.log("logged in:", data);
   };
-  const onAuthError = (err: string) => console.error(err);
+  const handleError = (err: string) => console.error(err);
 
   return (
     <>
       <PersianLoginLibrary
         type="phone"
-        onAuthSuccess={onAuthSuccess}
-        onAuthError={onAuthError}
+        onAuthSuccess={handleSuccess}
+        onAuthError={handleError}
       />
       <PersianLoginLibrary
         type="email"
-        onAuthSuccess={onAuthSuccess}
-        onAuthError={onAuthError}
+        onAuthSuccess={handleSuccess}
+        onAuthError={handleError}
       />
       <PersianLoginLibrary
         type="username"
         mode="signup"
-        onAuthSuccess={onAuthSuccess}
-        onAuthError={onAuthError}
+        onAuthSuccess={handleSuccess}
+        onAuthError={handleError}
       />
       <GithubLoginButton
         clientId={process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID!}
         redirectUri="https://example.com/login"
-        onAuthSuccess={onAuthSuccess}
-        onError={onAuthError}
+        onAuthSuccess={handleSuccess}
+        onError={handleError}
       />
     </>
   );
 }
 ```
+
+> **Note on prop names** — the high-level `PersianLoginLibrary` exposes `onAuthError`,
+> while the lower-level `PersianLoginForm` and `GithubLoginButton` use `onError`.
 
 Wrap your app in an RTL container so layout renders correctly:
 
@@ -138,13 +177,16 @@ Wrap your app in an RTL container so layout renders correctly:
 
 ## Wiring up a real backend
 
-By default the form simulates API calls with an 800 ms delay. Pass your own async functions to talk to a real backend — no `useMutation` needed, the library tracks loading and errors for you:
+By default the form simulates API calls with an 800 ms delay. Pass your own async functions to talk to a real backend — no `useMutation` needed, the library tracks loading and errors for you.
+
+<details>
+<summary><b>Show full backend wiring example</b></summary>
 
 ```tsx
 <PersianLoginForm
   type="phone"
-  onAuthSuccess={onAuthSuccess}
-  onError={onAuthError}
+  onAuthSuccess={handleSuccess}
+  onError={handleError}
   requestOtp={async (phoneNumber) => {
     await fetch("/api/otp/request", {
       method: "POST",
@@ -170,6 +212,8 @@ By default the form simulates API calls with an 800 ms delay. Pass your own asyn
 
 Anything thrown becomes a typed error in `onError`. Anything resolved triggers `onAuthSuccess` with a typed payload.
 
+</details>
+
 ---
 
 ## GitHub OAuth
@@ -181,7 +225,8 @@ Anything thrown becomes a typed error in `onError`. Anything resolved triggers `
 3. The button, when rendered on that return page, reads the `code`, validates `state`, and calls `onAuthSuccess({ type: "github", provider: "github", githubCode })`.
 4. **Your server must exchange the code for a token** — this requires the client secret and cannot be done in the browser.
 
-Typical server-side exchange:
+<details>
+<summary><b>Show typical server-side exchange</b></summary>
 
 ```ts
 // Next.js Route Handler example: app/api/github/callback/route.ts
@@ -196,6 +241,8 @@ const res = await fetch("https://github.com/login/oauth/access_token", {
   }),
 });
 ```
+
+</details>
 
 ---
 
@@ -226,28 +273,16 @@ dist/                # build output (git-ignored)
 
 ---
 
-## Scripts
-
-```bash
-npm run dev         # start the Next.js demo at http://localhost:3000
-npm run build       # production build of the demo app
-npm run typecheck   # tsc --noEmit across the whole repo
-npm run build:lib   # bundle src/ into dist/ (ESM + CJS + .d.ts) via tsup
-```
-
----
-
-<!-- ## Publishing
-
-When you're ready to publish:
-
-1. Pick a final `name` (`persian-auth` may already be taken on npm — check first).
-2. `npm run build:lib` — outputs `dist/` with ESM, CJS, and `.d.ts`.
-3. `npm publish --access public`.
-
-for future partners only
---- -->
-
 ## License
 
 MIT
+
+---
+
+<div align="center">
+
+If `persian-auth` saved you time, please consider giving it a ⭐ on [GitHub](https://github.com/amirmatinjamshidi-rgb/persian-auth) — it really helps.
+
+Made with ❤️ in Iran by [Amir Matin Jamshidi](https://github.com/amirmatinjamshidi-rgb)
+
+</div>

@@ -18,4 +18,8 @@ export type {
   GithubLoginButtonProps,
   PersianFormValues,
   FieldName,
+  AuthErrorCode,
+  AuthError,
+  AuthActionStatus,
+  AuthActionResult,
 } from "./types";
