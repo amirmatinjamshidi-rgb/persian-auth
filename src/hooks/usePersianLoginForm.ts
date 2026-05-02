@@ -7,6 +7,7 @@ import type {
   FieldName,
   FormMode,
   LoginType,
+  PersianAuthEndpoints,
   PersianFormValues,
 } from "../types";
 
@@ -15,6 +16,15 @@ export interface UsePersianLoginFormOptions {
   mode?: FormMode;
   onAuthSuccess?: AuthSuccessHandler;
   onError?: AuthErrorHandler;
+  /**
+   * Declarative backend URLs — consumed by the internal HTTP client in Part 6.
+   *
+   * **Today:** accepted for API stability but ignored; keep using `requestOtp`,
+   * `verifyOtp`, and `submitCredentials`. After Part 6, omit those callbacks when
+   * you only need default JSON `POST` behaviour, or pass both — precedence is
+   * documented in that release.
+   */
+  endpoints?: PersianAuthEndpoints;
   /**
    * Replace with a real call to your backend. Should resolve on success
    * and reject/throw on failure. Defaults to a simulated 1s delay.
@@ -82,6 +92,8 @@ export function usePersianLoginForm(options: UsePersianLoginFormOptions) {
     verifyOtp = defaultVerifyOtp,
     submitCredentials = defaultSubmitCredentials,
   } = options;
+
+  // `options.endpoints` is deliberately unused until Part 6 wires `authFetch`.
 
   const [step, setStep] = useState<"form" | "verification">("form");
   const [values, setValues] = useState<PersianFormValues>({

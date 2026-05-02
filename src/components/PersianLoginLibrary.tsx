@@ -16,6 +16,7 @@ export const PersianLoginLibrary: React.FC<PersianLoginLibraryProps> = ({
   mode,
   onAuthSuccess,
   onAuthError,
+  endpoints,
   className,
   classNames,
 }) => {
@@ -29,6 +30,7 @@ export const PersianLoginLibrary: React.FC<PersianLoginLibraryProps> = ({
         mode={mode}
         onAuthSuccess={onAuthSuccess}
         onError={onAuthError}
+        endpoints={endpoints}
         classNames={classNames}
       />
     </div>

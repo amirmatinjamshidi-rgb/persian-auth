@@ -52,6 +52,12 @@ export interface PersianLoginFormProps {
   mode?: FormMode;
   onAuthSuccess?: AuthSuccessHandler;
   onError?: AuthErrorHandler;
+  /**
+   * Declarative backend URLs — used by the internal HTTP client in Part 6.
+   * Until Part 6 ships, this prop is ignored; use `requestOtp`, `verifyOtp`, and
+   * `submitCredentials` as today.
+   */
+  endpoints?: PersianAuthEndpoints;
   className?: string;
   classNames?: PersianLoginClassNames;
 }
@@ -61,6 +67,8 @@ export interface PersianLoginLibraryProps {
   mode?: FormMode;
   onAuthSuccess: AuthSuccessHandler;
   onAuthError?: AuthErrorHandler;
+  /** Forwarded to `PersianLoginForm` — same behaviour as `PersianLoginFormProps.endpoints`. */
+  endpoints?: PersianAuthEndpoints;
   className?: string;
   classNames?: PersianLoginClassNames;
 }
@@ -87,6 +95,54 @@ export interface PersianFormValues {
 
 export type FieldName = keyof PersianFormValues;
 
+/** Allowed HTTP verbs for built-in auth action requests. Defaults are chosen per action when omitted. */
+export type AuthHttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
+/**
+ * Describes one HTTP endpoint used by the library when calling your backend instead of passing
+ * imperative `requestOtp` / `verifyOtp` / `submitCredentials` functions.
+ *
+ * A plain string shorthand (`"/api/auth/login"`) is also accepted; see `AuthEndpointSpecifier`.
+ */
+export interface AuthHttpEndpoint {
+  /** Absolute URL or same-origin path. */
+  url: string;
+  method?: AuthHttpMethod;
+  /** Extra headers merged on top of the client's defaults (for example JSON `Content-Type`). */
+  headers?: HeadersInit;
+  /** Forwarded to `fetch` — use `"include"` when your API relies on session cookies. */
+  credentials?: RequestCredentials;
+}
+
+/**
+ * Either a URL/path string or a full endpoint config object.
+ *
+ * Shorthand strings are expanded to `POST` with `Content-Type: application/json` by the built-in
+ * client (Part 6), unless the endpoint object sets `method` / `headers` explicitly.
+ */
+export type AuthEndpointSpecifier = string | AuthHttpEndpoint;
+
+/**
+ * When login and signup hit different routes, pass one URL per `FormMode`.
+ * If you only set one side, the other mode falls back to runtime behavior defined in Part 9.
+ */
+export interface CredentialEndpointByMode {
+  login?: AuthEndpointSpecifier;
+  signup?: AuthEndpointSpecifier;
+}
+
+/**
+ * Optional map of backend endpoints for the built-in auth action client.
+ *
+ * Pass this via `PersianLoginFormProps.endpoints` / `PersianLoginLibraryProps.endpoints`.
+ * The helper that performs `fetch` consumes these shapes in Part 6.
+ */
+export interface PersianAuthEndpoints {
+  requestOtp?: AuthEndpointSpecifier;
+  verifyOtp?: AuthEndpointSpecifier;
+  /** Same route for both modes, or split routes per `FormMode`. */
+  submitCredentials?: AuthEndpointSpecifier | CredentialEndpointByMode;
+}
 
 export type AuthErrorCode =
   | "network"
