@@ -53,9 +53,9 @@ export interface PersianLoginFormProps {
   onAuthSuccess?: AuthSuccessHandler;
   onError?: AuthErrorHandler;
   /**
-   * Declarative backend URLs — used by the internal HTTP client in Part 6.
-   * Until Part 6 ships, this prop is ignored; use `requestOtp`, `verifyOtp`, and
-   * `submitCredentials` as today.
+   * Declarative backend URLs for the internal JSON client (`authFetch`).
+   * **Precedence:** explicit `requestOtp` / `verifyOtp` / `submitCredentials` props
+   * override these when both are set. For `requestOtp`, see Part 7.
    */
   endpoints?: PersianAuthEndpoints;
   className?: string;
@@ -132,12 +132,16 @@ export interface CredentialEndpointByMode {
 }
 
 /**
- * Optional map of backend endpoints for the built-in auth action client.
+ * Optional map of backend endpoints for the built-in auth action client (`authFetch`).
  *
  * Pass this via `PersianLoginFormProps.endpoints` / `PersianLoginLibraryProps.endpoints`.
- * The helper that performs `fetch` consumes these shapes in Part 6.
+ * `requestOtp` is consumed in Part 7; verify and credential endpoints follow later.
  */
 export interface PersianAuthEndpoints {
+  /**
+   * Request SMS / WhatsApp OTP for the given phone.
+   * Built-in client sends `POST` JSON: `{ phoneNumber }` with normalized `09XXXXXXXXX`.
+   */
   requestOtp?: AuthEndpointSpecifier;
   verifyOtp?: AuthEndpointSpecifier;
   /** Same route for both modes, or split routes per `FormMode`. */

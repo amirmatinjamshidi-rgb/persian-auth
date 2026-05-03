@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
+import { authFetch, resolveAuthEndpoint } from "../internal/authFetch";
 import type {
   AuthErrorHandler,
   AuthSuccessHandler,
@@ -17,17 +18,18 @@ export interface UsePersianLoginFormOptions {
   onAuthSuccess?: AuthSuccessHandler;
   onError?: AuthErrorHandler;
   /**
-   * Declarative backend URLs — consumed by the internal HTTP client in Part 6.
+   * Declarative backend URLs for `authFetch` (JSON `POST` by default).
    *
-   * **Today:** accepted for API stability but ignored; keep using `requestOtp`,
-   * `verifyOtp`, and `submitCredentials`. After Part 6, omit those callbacks when
-   * you only need default JSON `POST` behaviour, or pass both — precedence is
-   * documented in that release.
+   * **Precedence:** when you pass both `endpoints.requestOtp` and `requestOtp`,
+   * the explicit `requestOtp` callback wins. Same pattern will apply to verify
+   * and credentials in later parts.
    */
   endpoints?: PersianAuthEndpoints;
   /**
-   * Replace with a real call to your backend. Should resolve on success
-   * and reject/throw on failure. Defaults to a simulated 1s delay.
+   * Custom OTP request. When provided, overrides `endpoints.requestOtp`.
+   * Should resolve on success and reject/throw on failure.
+   * If omitted and `endpoints.requestOtp` is set, the built-in client runs.
+   * Otherwise defaults to a simulated delay.
    */
   requestOtp?: (phoneNumber: string) => Promise<void>;
   verifyOtp?: (phoneNumber: string, code: string) => Promise<void>;
@@ -88,12 +90,33 @@ export function usePersianLoginForm(options: UsePersianLoginFormOptions) {
     mode = "login",
     onAuthSuccess,
     onError,
-    requestOtp = defaultRequestOtp,
+    endpoints,
+    requestOtp: requestOtpOverride,
     verifyOtp = defaultVerifyOtp,
     submitCredentials = defaultSubmitCredentials,
   } = options;
 
-  // `options.endpoints` is deliberately unused until Part 6 wires `authFetch`.
+  const requestOtpSpec = endpoints?.requestOtp;
+
+  const effectiveRequestOtp = useCallback(
+    async (phoneNumber: string) => {
+      if (requestOtpOverride) {
+        await requestOtpOverride(phoneNumber);
+        return;
+      }
+      if (requestOtpSpec !== undefined) {
+        const resolved = resolveAuthEndpoint(requestOtpSpec);
+        const result = await authFetch({
+          ...resolved,
+          body: { phoneNumber },
+        });
+        if (!result.ok) throw new Error(result.error.message);
+        return;
+      }
+      await defaultRequestOtp();
+    },
+    [requestOtpOverride, requestOtpSpec],
+  );
 
   const [step, setStep] = useState<"form" | "verification">("form");
   const [values, setValues] = useState<PersianFormValues>({
@@ -187,7 +210,7 @@ export function usePersianLoginForm(options: UsePersianLoginFormOptions) {
         setErrors({ phoneNumber: result.error.issues[0]?.message });
         return;
       }
-      await requestOtp(normalizedPhone);
+      await effectiveRequestOtp(normalizedPhone);
       setStep("verification");
       setResendTimer(RESEND_SECONDS);
     } catch (err) {
@@ -195,7 +218,7 @@ export function usePersianLoginForm(options: UsePersianLoginFormOptions) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [values.phoneNumber, requestOtp, onError]);
+  }, [values.phoneNumber, effectiveRequestOtp, onError]);
 
   const submitOtp = useCallback(async () => {
     const code = otp.join("");
@@ -247,12 +270,12 @@ export function usePersianLoginForm(options: UsePersianLoginFormOptions) {
   const resend = useCallback(async () => {
     if (resendTimer > 0) return;
     try {
-      await requestOtp(normalizePhoneNumber(values.phoneNumber));
+      await effectiveRequestOtp(normalizePhoneNumber(values.phoneNumber));
       setResendTimer(RESEND_SECONDS);
     } catch (err) {
       onError?.(err instanceof Error ? err.message : "خطا در ارسال مجدد");
     }
-  }, [resendTimer, requestOtp, values.phoneNumber, onError]);
+  }, [resendTimer, effectiveRequestOtp, values.phoneNumber, onError]);
 
   const backToForm = useCallback(() => {
     setStep("form");
